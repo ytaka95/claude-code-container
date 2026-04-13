@@ -1,12 +1,9 @@
 name: Build and Push Docker Image
 
 on:
-  schedule:
-    - cron: '0 0 * * 1'   # 毎週月曜 0:00(UTC) に定期ビルド
   workflow_dispatch:      # 手動実行を有効化
-  push:
-    branches: [ "main" ]  # mainブランチへのプッシュ時に実行
-    tags: [ 'v*.*.*' ]    # v1.0.0 のようなタグが付いた時に実行
+  pull_request:
+    branches: [ "main" ]
 
 env:
   REGISTRY: ghcr.io
