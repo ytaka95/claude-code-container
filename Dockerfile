@@ -91,6 +91,7 @@ ENV SHELL=/bin/bash
 ENV EDITOR=vim
 ENV VISUAL=vim
 
-# Install Claude Code
+# Install Claude Code (ARG changes per run to bust cache and always fetch latest)
+ARG CACHE_BUST
 RUN curl -fsSL https://claude.ai/install.sh | bash
 ENV PATH="/home/${NON_ROOT_USER}/.local/bin:${PATH}"
