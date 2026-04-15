@@ -61,3 +61,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha # GitHub Actionsのキャッシュを利用して高速化
           cache-to: type=gha,mode=max
+          build-args: |
+            CACHE_BUST=${{ github.run_id }}
