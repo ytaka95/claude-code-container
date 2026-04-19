@@ -21,9 +21,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     git \
+    less \
     procps \
-    fzf \
-    zsh \
     unzip \
     gnupg2 \
     gh \
@@ -47,11 +46,6 @@ WORKDIR ${WORKING_DIR}
 # Create workspace and config directories and set permissions
 RUN mkdir -p ${WORKING_DIR} && \
     chown -R ${NON_ROOT_USER}:${NON_ROOT_USER} ${WORKING_DIR}
-
-ARG GIT_DELTA_VERSION=0.19.2
-RUN wget "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_arm64.deb" && \
-    dpkg -i "git-delta_${GIT_DELTA_VERSION}_arm64.deb" && \
-    rm "git-delta_${GIT_DELTA_VERSION}_arm64.deb"
 
 ## uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin sh
@@ -90,6 +84,8 @@ ENV PATH="/usr/local/share/npm-global/bin:${PATH}"
 ENV SHELL=/bin/bash
 ENV EDITOR=vim
 ENV VISUAL=vim
+
+RUN uv python install 3.13 && echo 'alias python="$(uv python find 3.13)"' >> ~/.bashrc
 
 # Install Claude Code (ARG changes per run to bust cache and always fetch latest)
 ARG CACHE_BUST
