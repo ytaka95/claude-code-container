@@ -85,6 +85,8 @@ ENV SHELL=/bin/bash
 ENV EDITOR=vim
 ENV VISUAL=vim
 
+RUN uv python install 3.13 && echo 'alias python="$(uv python find 3.13)"' >> ~/.bashrc
+
 # Install Claude Code (ARG changes per run to bust cache and always fetch latest)
 ARG CACHE_BUST
 RUN curl -fsSL https://claude.ai/install.sh | bash
