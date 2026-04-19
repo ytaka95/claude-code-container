@@ -50,6 +50,10 @@ RUN mkdir -p ${WORKING_DIR} && \
 ## uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin sh
 
+## Python tools
+RUN uv tool install ruff
+RUN uv tool install pytest
+
 ## go
 ARG GO_VERSION=1.26.2
 RUN wget https://go.dev/dl/go${GO_VERSION}.linux-arm64.tar.gz && \
