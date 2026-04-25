@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Claude-Code Image
 
 on:
   schedule:
@@ -48,6 +48,7 @@ jobs:
         uses: docker/build-push-action@v7.1.0
         with:
           context: .
+          file: docker/claude-code/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
