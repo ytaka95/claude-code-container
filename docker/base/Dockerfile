@@ -50,6 +50,7 @@ RUN mkdir -p ${WORKING_DIR} && \
 RUN curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin sh
 
 ## Python tools
+ENV UV_TOOL_BIN_DIR=/usr/local/bin
 RUN uv tool install ruff
 RUN uv tool install pytest
 
