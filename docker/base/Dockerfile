@@ -1,6 +1,5 @@
 FROM --platform=linux/arm64 ubuntu:24.04
 
-ARG CLAUDE_CODE_VERSION=latest
 ARG NON_ROOT_USER=ccuser
 ARG TZ=Asia/Tokyo
 
