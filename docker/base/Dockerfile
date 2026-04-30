@@ -18,7 +18,9 @@ ENV LC_ALL=ja_JP.UTF-8
 # Install basic development tools and iptables/ipset
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
+    cmake \
     curl \
+    g++ \
     git \
     less \
     procps \
@@ -27,6 +29,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gh \
     dnsutils \
     jq \
+    meson \
+    pkg-config \
     vim \
     wget \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -53,6 +57,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin s
 ENV UV_TOOL_BIN_DIR=/usr/local/bin
 RUN uv tool install ruff
 RUN uv tool install pytest
+RUN uv tool install pybind11
 
 ## go
 ARG GO_VERSION=1.26.2
