@@ -85,7 +85,7 @@ RUN apt-get install -y --no-install-recommends gpg && \
 
 ## AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
+    unzip -q awscliv2.zip && \
     ./aws/install && \
     rm -rf aws awscliv2.zip
 
@@ -93,7 +93,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
     apt-get update -y && \
-    apt-get install -y google-cloud-cli && \
+    apt-get install -y --no-install-recommends google-cloud-cli && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set up non-root user
@@ -107,5 +107,5 @@ RUN uv python install 3.13 && echo 'alias python="$(uv python find 3.13)"' >> ~/
 
 # Configure AWS CLI
 RUN mkdir ~/.aws && \
-    echo -e "[default]\naws_access_key_id = \naws_secret_access_key = \n" >> ~/.aws/credentials && \
-    echo -e "[local]\naws_access_key_id = local\naws_secret_access_key = local\nregion = us-east-1" >> ~/.aws/credentials 
+    printf "[default]\naws_access_key_id = \naws_secret_access_key = \n" >> ~/.aws/credentials && \
+    printf "[local]\naws_access_key_id = local\naws_secret_access_key = local\nregion = us-east-1" >> ~/.aws/credentials 
