@@ -2,7 +2,7 @@ name: Build and Push Claude-Code Image
 
 on:
   schedule:
-    - cron: '0 0 * * 0'   # 毎日 0:00 (UTC) に実行
+    - cron: '0 20 * * *'   # 毎日 20:00 (UTC) に実行
   workflow_dispatch:
 
 env:
