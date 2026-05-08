@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 ubuntu:24.04
+FROM ubuntu:24.04
 
 ARG NON_ROOT_USER=ccuser
 ARG TZ=Asia/Tokyo
@@ -61,9 +61,10 @@ RUN uv tool install pybind11
 
 ## go
 ARG GO_VERSION=1.26.2
-RUN wget https://go.dev/dl/go${GO_VERSION}.linux-arm64.tar.gz && \
-    tar -C /usr/local -xzf go${GO_VERSION}.linux-arm64.tar.gz && \
-    rm -rf go${GO_VERSION}.linux-arm64*
+ARG TARGETARCH
+RUN wget https://go.dev/dl/go${GO_VERSION}.linux-${TARGETARCH}.tar.gz && \
+    tar -C /usr/local -xzf go${GO_VERSION}.linux-${TARGETARCH}.tar.gz && \
+    rm -rf go${GO_VERSION}.linux-${TARGETARCH}*
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 ## gopls
@@ -84,7 +85,11 @@ RUN apt-get install -y --no-install-recommends gpg && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ## AWS CLI
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" && \
+RUN case ${TARGETARCH} in \
+        "amd64") AWS_ARCH="x86_64" ;; \
+        "arm64") AWS_ARCH="aarch64" ;; \
+    esac && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-${AWS_ARCH}.zip" -o "awscliv2.zip" && \
     unzip -q awscliv2.zip && \
     ./aws/install && \
     rm -rf aws awscliv2.zip
