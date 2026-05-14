@@ -1,5 +1,5 @@
 ARG BASE_IMAGE
-FROM --platform=linux/arm64 ${BASE_IMAGE}
+FROM ${BASE_IMAGE}
 
 ARG WORKING_DIR=/workspace
 ARG NON_ROOT_USER=ccuser
