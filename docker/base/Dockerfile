@@ -50,8 +50,16 @@ WORKDIR ${WORKING_DIR}
 RUN mkdir -p ${WORKING_DIR} && \
     chown -R ${NON_ROOT_USER}:${NON_ROOT_USER} ${WORKING_DIR}
 
+################################################
+# Python                                       #
+################################################
 ## uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin sh
+
+## pylsp
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends python3-pylsp && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ## Python tools
 ENV UV_TOOL_BIN_DIR=/usr/local/bin
@@ -59,6 +67,9 @@ RUN uv tool install ruff
 RUN uv tool install pytest
 RUN uv tool install pybind11
 
+################################################
+# Go                                           #
+################################################
 ## go
 ARG GO_VERSION=1.26.2
 ARG TARGETARCH
@@ -70,11 +81,9 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 ## gopls
 RUN GOBIN=/usr/local/bin go install golang.org/x/tools/gopls@latest
 
-## pylsp
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3-pylsp && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
+################################################
+# Terraform                                    #
+################################################
 ## terraform-ls
 RUN apt-get install -y --no-install-recommends gpg && \
     wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
@@ -103,6 +112,19 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -
 
 # Set up non-root user
 USER ${NON_ROOT_USER}
+
+################################################
+# Node / pnpm                                  #
+################################################
+## nvm / node
+ENV NVM_DIR="/home/${NON_ROOT_USER}/.nvm"
+RUN mkdir -p $NVM_DIR && \
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash && \
+    . "$NVM_DIR/nvm.sh" && \
+    nvm install 24 && \
+    node -v && \
+    corepack enable pnpm && \
+    pnpm -v
 
 # Install global packages
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
