@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config \
     vim \
     wget \
+    xz-utils \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -u 501 -m ${NON_ROOT_USER}
@@ -93,6 +94,19 @@ RUN apt-get install -y --no-install-recommends gpg && \
     apt-get install -y --no-install-recommends terraform-ls && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+################################################
+# Node / pnpm                                  #
+################################################
+ARG NODE_VERSION=v24.16.0
+RUN case ${TARGETARCH} in \
+        "amd64") NODE_ARCH="x64" ;; \
+        "arm64") NODE_ARCH="arm64" ;; \
+    esac && \
+    wget https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz && \
+    tar -xJf node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz -C /usr/local --strip-components=1 --no-same-owner && \
+    rm node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz && \
+    corepack enable pnpm
+
 ## AWS CLI
 RUN case ${TARGETARCH} in \
         "amd64") AWS_ARCH="x86_64" ;; \
@@ -112,19 +126,6 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -
 
 # Set up non-root user
 USER ${NON_ROOT_USER}
-
-################################################
-# Node / pnpm                                  #
-################################################
-## nvm / node
-ENV NVM_DIR="/home/${NON_ROOT_USER}/.nvm"
-RUN mkdir -p $NVM_DIR && \
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash && \
-    . "$NVM_DIR/nvm.sh" && \
-    nvm install 24 && \
-    node -v && \
-    corepack enable pnpm && \
-    pnpm -v
 
 # Install global packages
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
