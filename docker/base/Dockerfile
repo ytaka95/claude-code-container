@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config \
     vim \
     wget \
+    xz-utils \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -u 501 -m ${NON_ROOT_USER}
