@@ -14,3 +14,4 @@ ENV PATH="/home/${NON_ROOT_USER}/.local/bin:${PATH}"
 
 ARG CACHE_BUST
 RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN curl https://cursor.com/install -fsS | bash
