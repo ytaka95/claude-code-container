@@ -1,6 +1,7 @@
 FROM ubuntu:24.04
 
 ARG NON_ROOT_USER=ccuser
+ARG WORKING_DIR=/workspace
 ARG TZ=Asia/Tokyo
 
 # Set timezone
@@ -36,20 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xz-utils \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -u 501 -m ${NON_ROOT_USER}
-
 RUN update-ca-certificates
-
-# Ensure default node user has access to /usr/local/share
-RUN mkdir -p /usr/local/share/npm-global && \
-    chown -R ${NON_ROOT_USER}:${NON_ROOT_USER} /usr/local/share
-
-ARG WORKING_DIR=/workspace
-WORKDIR ${WORKING_DIR}
-
-# Create workspace and config directories and set permissions
-RUN mkdir -p ${WORKING_DIR} && \
-    chown -R ${NON_ROOT_USER}:${NON_ROOT_USER} ${WORKING_DIR}
 
 ################################################
 # Python                                       #
@@ -125,6 +113,18 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set up non-root user
+RUN useradd -u 501 -m ${NON_ROOT_USER}
+
+# Ensure default node user has access to /usr/local/share
+RUN mkdir -p /usr/local/share/npm-global && \
+    chown -R ${NON_ROOT_USER}:${NON_ROOT_USER} /usr/local/share
+
+WORKDIR ${WORKING_DIR}
+
+# Create workspace and config directories and set permissions
+RUN mkdir -p ${WORKING_DIR} && \
+    chown -R ${NON_ROOT_USER}:${NON_ROOT_USER} ${WORKING_DIR}
+
 USER ${NON_ROOT_USER}
 
 # Install global packages
