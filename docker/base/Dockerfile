@@ -132,7 +132,7 @@ USER ${NON_ROOT_USER}
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PATH="/usr/local/share/npm-global/bin:${PATH}"
 
-RUN uv python install 3.13 && echo 'alias python="$(uv python find 3.13)"' >> ~/.bashrc
+RUN uv python install 3.13 && echo "alias python=\"$(uv python find 3.13)\"" >> ~/.bashrc
 
 # Configure AWS CLI
 RUN mkdir ~/.aws && \
