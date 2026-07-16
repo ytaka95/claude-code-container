@@ -94,6 +94,7 @@ RUN case ${TARGETARCH} in \
     tar -xJf node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz -C /usr/local --strip-components=1 --no-same-owner && \
     rm node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz && \
     corepack enable pnpm
+    corepack prepare pnpm@latest --activate
 
 ## AWS CLI
 RUN case ${TARGETARCH} in \
