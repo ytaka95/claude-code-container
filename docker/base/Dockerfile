@@ -93,7 +93,7 @@ RUN case ${TARGETARCH} in \
     wget https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz && \
     tar -xJf node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz -C /usr/local --strip-components=1 --no-same-owner && \
     rm node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz && \
-    corepack enable pnpm
+    corepack enable pnpm && \
     corepack prepare pnpm@latest --activate
 
 ## AWS CLI
