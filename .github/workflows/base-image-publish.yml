@@ -2,7 +2,7 @@ name: Build and Push Base Image
 
 on:
   schedule:
-    - cron: '0 2 * * 0'   # 毎週日曜 2:00 (UTC) に実行
+    - cron: '0 2 1 * *'   # 毎月1日 2:00 (UTC) に実行
   workflow_dispatch:
 
 env:
